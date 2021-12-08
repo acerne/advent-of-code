@@ -27,23 +27,22 @@ protected:
 };
 
 template<class C>
-class Day : public IDay
+class DayBase : public IDay
 {
 public:
   template<typename T>
-  class Part : public IPart
+  class PartBase : public IPart
   {
   public:
-    inline void introduce() override final {
+    inline void introduce() override {
       std::cout << " Part " << m_part << ": " << std::endl;
     }
-    inline void print() override final {
-      std::cout << "  Result = " << m_result << ": " << std::endl;
-      std::cout << std::endl;
+    inline void print() override {
+      std::cout << "   Result = " << m_result << ": " << std::endl;
     }
 
   protected:
-    Part(int part)
+    PartBase(int part)
       : m_part(part) {}
 
   protected:
@@ -61,16 +60,17 @@ public:
       part->process();
       part->print();
     }
+    std::cout << "-----------------" << std::endl;
   }
 
 protected:
-  Day(int day)
+  DayBase(int day)
     : m_day(day) {}
 
 protected:
   std::vector<std::unique_ptr<IPart>> m_parts;
 
-  std::vector<C> m_inputs;
+  C m_input;
 
 private:
   int m_day;
