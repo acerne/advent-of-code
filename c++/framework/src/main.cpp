@@ -7,21 +7,17 @@
 int main() {
   std::vector<IDay*> days;
 
-  IDay* (*create)(int);
+  IDay* (*create)();
   void (*destroy)(IDay*);
 
   for (int day = 1; day < 4; day++) {
-
-    auto day_str = std::to_string(day);
-    day_str.insert(0, 1, '0');
-
-    const std::string day_lib("./libday" + day_str + ".so");
+    const std::string day_lib("./lib" + Day::to_string_id(day) + ".so");
     void* handle = dlopen(day_lib.c_str(), RTLD_LAZY);
 
-    create = (IDay * (*)(int)) dlsym(handle, "create_object");
+    create = (IDay * (*)()) dlsym(handle, "create_object");
     destroy = (void (*)(IDay*))dlsym(handle, "destroy_object");
 
-    days.push_back((IDay*)create(day));
+    days.push_back((IDay*)create());
   }
 
   for (const auto& day : days) {

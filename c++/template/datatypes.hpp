@@ -5,4 +5,4 @@
 using Input = std::vector<int32_t>;
 using Result = size_t;
 
-static int DAY_ = 1;
+static int DAY_ = 0;

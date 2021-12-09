@@ -32,7 +32,7 @@ std::pair<int16_t, int16_t> decode(const std::array<size_t, 12>& true_count, siz
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../day03/data.txt");
+  std::ifstream line_stream("../" + Day::to_string_id(DAY_) + "/data.txt");
   std::string line;
   while (std::getline(line_stream, line)) {
     m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
@@ -48,7 +48,7 @@ void Day::Part1::process() {
 void Day::Part2::process() {}
 
 extern "C" Day* create_object(int num) {
-  return new Day(num);
+  return new Day();
 }
 
 extern "C" void destroy_object(Day* object) {

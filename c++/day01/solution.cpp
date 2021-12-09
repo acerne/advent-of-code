@@ -32,7 +32,7 @@ std::vector<int32_t> window_sum(const Input& inputs, size_t window_size) {
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../day01/data.txt");
+  std::ifstream line_stream("../" + Day::to_string_id(DAY_) + "/data.txt");
   std::string line;
   while (std::getline(line_stream, line)) {
     m_input.push_back(std::stoi(line));
@@ -49,7 +49,7 @@ void Day::Part2::process() {
 }
 
 extern "C" Day* create_object(int num) {
-  return new Day(num);
+  return new Day();
 }
 
 extern "C" void destroy_object(Day* object) {

@@ -55,7 +55,7 @@ struct Submarine2 {
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../day02/data.txt");
+  std::ifstream line_stream("../" + Day::to_string_id(DAY_) + "/data.txt");
   std::string line, command, value;
   while (std::getline(line_stream, line)) {
     std::stringstream ss(line);
@@ -82,7 +82,7 @@ void Day::Part2::process() {
 }
 
 extern "C" Day* create_object(int num) {
-  return new Day(num);
+  return new Day();
 }
 
 extern "C" void destroy_object(Day* object) {
