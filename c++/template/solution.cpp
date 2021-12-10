@@ -4,29 +4,30 @@
 #include "day.hpp"
 
 #include <fstream>
-#include <numeric>
 
 namespace
 {} // namespace
 
-void Day::load() {
-  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
+Input Day::read(const std::string& file_path) {
+  Input inputs;
+  std::ifstream line_stream(file_path);
   std::string line;
   while (std::getline(line_stream, line)) {
-    // m_input.push_back(
+    // inputs.push_back();
   }
+  return inputs;
 }
 
-void Day::Part1::process() {
-  // m_result =
+Result Day::Part1::process(const Input& input) {
+  return -1;
 }
 
-void Day::Part2::process() {
-  // m_result =
+Result Day::Part2::process(const Input& input) {
+  return -1;
 }
 
 extern "C" Day* create_object(int num) {
-  return new Day(num);
+  return new Day();
 }
 
 extern "C" void destroy_object(Day* object) {

@@ -32,13 +32,13 @@ std::vector<int32_t> window_sum(const Input& inputs, size_t window_size) {
 } // namespace
 
 Input Day::read(const std::string& file_path) {
-  Input data;
+  Input inputs;
   std::ifstream line_stream(file_path);
   std::string line;
   while (std::getline(line_stream, line)) {
-    data.push_back(std::stoi(line));
+    inputs.push_back(std::stoi(line));
   }
-  return data;
+  return inputs;
 }
 
 Result Day::Part1::process(const Input& input) {

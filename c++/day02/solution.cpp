@@ -55,16 +55,16 @@ struct Submarine2 {
 } // namespace
 
 Input Day::read(const std::string& file_path) {
-  Input data;
+  Input inputs;
   std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
   std::string line, command, value;
   while (std::getline(line_stream, line)) {
     std::stringstream ss(line);
     getline(ss, command, ' ');
     getline(ss, value, ' ');
-    data.emplace_back(string_to_command_.at(command), std::stoi(value));
+    inputs.emplace_back(string_to_command_.at(command), std::stoi(value));
   }
-  return data;
+  return inputs;
 }
 
 Result Day::Part1::process(const Input& input) {
