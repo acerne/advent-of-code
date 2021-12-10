@@ -32,20 +32,31 @@ std::pair<int16_t, int16_t> decode(const std::array<size_t, 12>& true_count, siz
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-  std::string line;
-  while (std::getline(line_stream, line)) {
-    m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
+    std::string line;
+    while (std::getline(line_stream, line)) {
+      m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
+    }
+  }
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
+    std::string line;
+    while (std::getline(line_stream, line)) {
+      m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
+    }
   }
 }
 
-void Day::Part1::process() {
-  const auto counts = count(m_input);
-  const auto [gamma, epsilon] = decode(counts, m_input.size());
-  m_result = gamma * epsilon;
+Result Day::Part1::process(const Input& input) {
+  const auto counts = count(input);
+  const auto [gamma, epsilon] = decode(counts, input.size());
+  return gamma * epsilon;
 }
 
-void Day::Part2::process() {}
+Result Day::Part2::process(const Input& input) {
+  return -1;
+}
 
 extern "C" Day* create_object(int num) {
   return new Day();

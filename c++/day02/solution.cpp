@@ -55,30 +55,42 @@ struct Submarine2 {
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-  std::string line, command, value;
-  while (std::getline(line_stream, line)) {
-    std::stringstream ss(line);
-    getline(ss, command, ' ');
-    getline(ss, value, ' ');
-    m_input.emplace_back(string_to_command_.at(command), std::stoi(value));
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
+    std::string line, command, value;
+    while (std::getline(line_stream, line)) {
+      std::stringstream ss(line);
+      getline(ss, command, ' ');
+      getline(ss, value, ' ');
+      m_sample.emplace_back(string_to_command_.at(command), std::stoi(value));
+    }
+  }
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
+    std::string line, command, value;
+    while (std::getline(line_stream, line)) {
+      std::stringstream ss(line);
+      getline(ss, command, ' ');
+      getline(ss, value, ' ');
+      m_input.emplace_back(string_to_command_.at(command), std::stoi(value));
+    }
   }
 }
 
-void Day::Part1::process() {
+Result Day::Part1::process(const Input& input) {
   Submarine1 sub{0, 0};
-  for (const auto& [command, value] : m_input) {
+  for (const auto& [command, value] : input) {
     sub.move(command, value);
   }
-  m_result = sub.m_horizontal * sub.m_depth;
+  return sub.m_horizontal * sub.m_depth;
 }
 
-void Day::Part2::process() {
+Result Day::Part2::process(const Input& input) {
   Submarine2 sub{0, 0, 0};
-  for (const auto& [command, value] : m_input) {
+  for (const auto& [command, value] : input) {
     sub.move(command, value);
   }
-  m_result = sub.m_horizontal * sub.m_depth;
+  return sub.m_horizontal * sub.m_depth;
 }
 
 extern "C" Day* create_object(int num) {

@@ -32,20 +32,29 @@ std::vector<int32_t> window_sum(const Input& inputs, size_t window_size) {
 } // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-  std::string line;
-  while (std::getline(line_stream, line)) {
-    m_input.push_back(std::stoi(line));
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
+    std::string line;
+    while (std::getline(line_stream, line)) {
+      m_sample.push_back(std::stoi(line));
+    }
+  }
+  {
+    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
+    std::string line;
+    while (std::getline(line_stream, line)) {
+      m_input.push_back(std::stoi(line));
+    }
   }
 }
 
-void Day::Part1::process() {
-  m_result = count_increments(m_input);
+Result Day::Part1::process(const Input& input) {
+  return count_increments(input);
 }
 
-void Day::Part2::process() {
-  const auto sums = window_sum(m_input, 3);
-  m_result = count_increments(sums);
+Result Day::Part2::process(const Input& input) {
+  const auto sums = window_sum(input, 3);
+  return count_increments(sums);
 }
 
 extern "C" Day* create_object(int num) {

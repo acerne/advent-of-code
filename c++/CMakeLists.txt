@@ -10,7 +10,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_DL_LIBS})
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE common/ framework/)
 
-foreach(DAY day01 day02 day03)
+foreach(DAY day01 day02 day03 )
     add_library(${DAY} SHARED ${DAY}/solution.cpp)
     target_include_directories(${DAY} PRIVATE common/ ${DAY}/)
 endforeach()
