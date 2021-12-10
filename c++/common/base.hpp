@@ -80,10 +80,15 @@ public:
 
   inline void load() override final {
     m_sample = read("../" + day_to_string_id(DAY_) + "/sample.txt");
+    const auto start = std::chrono::steady_clock::now();
     m_input = read("../" + day_to_string_id(DAY_) + "/data.txt");
+    const auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+      std::chrono::steady_clock::now() - start);
+    m_load_duration_us = duration_ns.count() / 1000.0;
   }
   inline void run() override final {
     std::cout << "Day " << m_day << ": " << std::endl;
+    std::cout << "  Loading took " << m_load_duration_us << " us" << std::endl;
 
     for (auto& part : m_parts) {
       part->introduce();
@@ -106,4 +111,6 @@ protected:
 
 private:
   int m_day;
+
+  float m_load_duration_us;
 };
