@@ -31,21 +31,14 @@ std::vector<int32_t> window_sum(const Input& inputs, size_t window_size) {
 }
 } // namespace
 
-void Day::load() {
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
-    std::string line;
-    while (std::getline(line_stream, line)) {
-      m_sample.push_back(std::stoi(line));
-    }
+Input Day::read(const std::string& file_path) {
+  Input data;
+  std::ifstream line_stream(file_path);
+  std::string line;
+  while (std::getline(line_stream, line)) {
+    data.push_back(std::stoi(line));
   }
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-    std::string line;
-    while (std::getline(line_stream, line)) {
-      m_input.push_back(std::stoi(line));
-    }
-  }
+  return data;
 }
 
 Result Day::Part1::process(const Input& input) {

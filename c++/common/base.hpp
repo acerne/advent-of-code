@@ -67,6 +67,13 @@ public:
     const T m_test_expected;
   };
 
+public:
+  virtual C read(const std::string& file_path) = 0;
+
+  inline void load() override final {
+    m_sample = read("../" + day_to_string_id(DAY_) + "/sample.txt");
+    m_input = read("../" + day_to_string_id(DAY_) + "/data.txt");
+  }
   inline void run() override final {
     std::cout << "Day " << m_day << ": " << std::endl;
 

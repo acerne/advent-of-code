@@ -32,5 +32,5 @@ public:
   Day(const Day&) = delete;
   Day(Day&&) = delete;
 
-  void load() override;
+  Input read(const std::string& file_path) override;
 };

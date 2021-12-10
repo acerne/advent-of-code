@@ -54,27 +54,17 @@ struct Submarine2 {
 };
 } // namespace
 
-void Day::load() {
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
-    std::string line, command, value;
-    while (std::getline(line_stream, line)) {
-      std::stringstream ss(line);
-      getline(ss, command, ' ');
-      getline(ss, value, ' ');
-      m_sample.emplace_back(string_to_command_.at(command), std::stoi(value));
-    }
+Input Day::read(const std::string& file_path) {
+  Input data;
+  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
+  std::string line, command, value;
+  while (std::getline(line_stream, line)) {
+    std::stringstream ss(line);
+    getline(ss, command, ' ');
+    getline(ss, value, ' ');
+    data.emplace_back(string_to_command_.at(command), std::stoi(value));
   }
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-    std::string line, command, value;
-    while (std::getline(line_stream, line)) {
-      std::stringstream ss(line);
-      getline(ss, command, ' ');
-      getline(ss, value, ' ');
-      m_input.emplace_back(string_to_command_.at(command), std::stoi(value));
-    }
-  }
+  return data;
 }
 
 Result Day::Part1::process(const Input& input) {

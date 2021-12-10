@@ -6,46 +6,51 @@
 
 namespace
 {
-std::array<size_t, 12> count(const std::vector<std::bitset<12>>& values) {
-  std::array<size_t, 12> true_count{};
+
+std::vector<bool> parse_line(const std::string& line) {
+  std::vector<bool> bits;
+  for (const auto& c : line) {
+    bits.push_back(c != '0');
+  }
+  std::reverse(bits.begin(), bits.end());
+  return bits;
+}
+
+std::vector<size_t> count(const Input& values) {
+  size_t n_bits = values.front().size();
+  std::vector<size_t> true_count(n_bits, 0);
   for (const auto& item : values) {
-    for (size_t i = 0; i < 12; i++) {
-      if (item[i]) {
-        true_count[i]++;
+    for (size_t i = 0; i < n_bits; i++) {
+      if (item.at(i)) {
+        true_count.at(i)++;
       }
     }
   }
   return true_count;
 }
 
-std::pair<int16_t, int16_t> decode(const std::array<size_t, 12>& true_count, size_t total) {
-  std::bitset<12> gamma = 0;
-  for (size_t i = 0; i < 12; i++) {
-    if (true_count[i] > total / 2) {
-      gamma.set(i);
+std::pair<int16_t, int16_t> decode(const std::vector<size_t>& true_count, size_t total) {
+  size_t n_bits = true_count.size();
+  int16_t gamma = 0;
+  for (size_t i = 0; i < n_bits; i++) {
+    if (true_count.at(i) > total / 2) {
+      gamma |= 1 << i;
     }
   }
-  std::bitset<12> epsilon = ~gamma;
-  return {static_cast<int16_t>(gamma.to_ulong()), static_cast<int16_t>(epsilon.to_ulong())};
+  int16_t epsilon = ~(gamma | (0xFFFF << n_bits));
+  return {gamma, epsilon};
 }
 
 } // namespace
 
-void Day::load() {
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/sample.txt");
-    std::string line;
-    while (std::getline(line_stream, line)) {
-      m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
-    }
+Input Day::read(const std::string& file_path) {
+  Input data;
+  std::ifstream line_stream(file_path);
+  std::string line;
+  while (std::getline(line_stream, line)) {
+    data.push_back(parse_line(line));
   }
-  {
-    std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
-    std::string line;
-    while (std::getline(line_stream, line)) {
-      m_input.push_back(std::bitset<12>(std::stoi(line, nullptr, 2)));
-    }
-  }
+  return data;
 }
 
 Result Day::Part1::process(const Input& input) {

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <bitset>
 #include <vector>
 
-using Input = std::vector<std::bitset<12>>;
+using Input = std::vector<std::vector<bool>>;
 using Result = int32_t;
 
 static int DAY_ = 3;
