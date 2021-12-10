@@ -10,7 +10,7 @@ namespace
 {} // namespace
 
 void Day::load() {
-  std::ifstream line_stream("../" + Day::to_string_id(DAY_) + "/data.txt");
+  std::ifstream line_stream("../" + day_to_string_id(DAY_) + "/data.txt");
   std::string line;
   while (std::getline(line_stream, line)) {
     // m_input.push_back(

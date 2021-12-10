@@ -5,12 +5,6 @@
 class Day : public DayBase<Input>
 {
 public:
-  static std::string to_string_id(int day) {
-    auto num = std::to_string(day);
-    num.insert(0, 1, '0');
-    return "day" + num;
-  }
-
   class Part1 : public DayBase::PartBase<Result>
   {
   public:

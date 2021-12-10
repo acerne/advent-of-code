@@ -1,31 +1,27 @@
-#include "datatypes.hpp"
-#include "day.hpp"
+#include "loader.hpp"
 
-#include <dlfcn.h>
-#include <memory>
+#include <iostream>
 
-int main() {
-  std::vector<IDay*> days;
+int main(int argc, char* argv[]) {
 
-  IDay* (*create)();
-  void (*destroy)(IDay*);
+  std::vector<std::shared_ptr<IDay>> days;
 
-  for (int day = 1; day < 4; day++) {
-    const std::string day_lib("./lib" + Day::to_string_id(day) + ".so");
-    void* handle = dlopen(day_lib.c_str(), RTLD_LAZY);
+  std::cout << "LOADING..." << std::endl;
 
-    create = (IDay * (*)()) dlsym(handle, "create_object");
-    destroy = (void (*)(IDay*))dlsym(handle, "destroy_object");
-
-    days.push_back((IDay*)create());
+  if (argc > 1) {
+    std::vector<int> args;
+    for (int i = 1; i < argc; i++) {
+      args.push_back(std::stoi(argv[i]));
+    }
+    days = Loader::load_some(args);
+  } else {
+    days = Loader::load_all();
   }
 
-  for (const auto& day : days) {
-    day->load();
-    day->run();
-  }
+  std::cout << "RUNNING..." << std::endl;
 
-  for (const auto day : days) {
-    destroy(day);
+  for (auto& day : days) {
+    day.get()->load();
+    day.get()->run();
   }
 }
