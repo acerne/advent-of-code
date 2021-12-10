@@ -2,6 +2,7 @@
 
 #include "interface.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -36,7 +37,11 @@ public:
       m_test_result = process(m_sample);
     }
     inline void run() override final {
+      const auto start = std::chrono::steady_clock::now();
       m_result = process(m_input);
+      const auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now() - start);
+      m_duration_us = duration_ns.count() / 1000.0;
     }
     inline void print() override final {
       if (m_test_result != m_test_expected) {
@@ -46,7 +51,8 @@ public:
       } else {
         std::cout << "   Test passed." << std::endl;
       }
-      std::cout << "   Result = " << m_result << ": " << std::endl;
+      std::cout << "   Result = " << m_result << std::endl;
+      std::cout << "   Calculation took " << m_duration_us << " us" << std::endl;
     }
 
   protected:
@@ -65,6 +71,8 @@ public:
     T m_result;
     T m_test_result;
     const T m_test_expected;
+
+    float m_duration_us;
   };
 
 public:
