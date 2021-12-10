@@ -1,10 +1,12 @@
 #pragma once
 
-#include "base.hpp"
+#include "interface.hpp"
 
 #include <dlfcn.h>
 #include <fstream>
+#include <iostream>
 #include <memory>
+#include <vector>
 
 class Loader
 {
