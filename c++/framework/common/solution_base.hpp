@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface.hpp"
+#include "interfaces.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -8,34 +8,24 @@
 #include <string>
 #include <vector>
 
-class IPart
-{
-public:
-  virtual void introduce() = 0;
-  virtual void test() = 0;
-  virtual void run() = 0;
-  virtual void print() = 0;
-
-protected:
-  IPart() {}
-};
-
 template<class C>
-class DayBase : public IDay
+class SolutionBase : public ISolution
 {
-public:
+public: // Classes
   template<typename T>
   class PartBase : public IPart
   {
-  public:
+  public: // Methods
     virtual T process(const C& input) = 0;
 
     inline void introduce() override final {
-      std::cout << " Part " << m_part << ": " << std::endl;
+      std::cout << "  Part " << m_part << ": " << std::endl;
     }
+
     inline void test() override final {
       m_test_result = process(m_sample);
     }
+
     inline void run() override final {
       const auto start = std::chrono::steady_clock::now();
       m_result = process(m_input);
@@ -43,6 +33,7 @@ public:
         std::chrono::steady_clock::now() - start);
       m_duration_us = duration_ns.count() / 1000.0;
     }
+
     inline void print() override final {
       if (m_test_result != m_test_expected) {
         std::cout << "   Test FAILED!" << std::endl;
@@ -55,18 +46,18 @@ public:
       std::cout << "   Calculation took " << m_duration_us << " us" << std::endl;
     }
 
-  protected:
-    PartBase(int part, const Input& input, const Input& sample, Result sample_result)
+  protected: // Methods
+    PartBase(int part, const C& input, const C& sample, T sample_result)
       : m_part(part)
       , m_input(input)
       , m_sample(sample)
       , m_test_expected(sample_result) {}
 
-  private:
+  private: // Members
     const int m_part;
 
-    const Input& m_input;
-    const Input& m_sample;
+    const C& m_input;
+    const C& m_sample;
 
     T m_result;
     T m_test_result;
@@ -75,20 +66,27 @@ public:
     float m_duration_us;
   };
 
-public:
+public: // Methods
   virtual C read(const std::string& file_path) = 0;
 
   inline void load() override final {
-    m_sample = read("../" + day_to_string_id(DAY_) + "/sample.txt");
-    const auto start = std::chrono::steady_clock::now();
-    m_input = read("../" + day_to_string_id(DAY_) + "/data.txt");
-    const auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
-      std::chrono::steady_clock::now() - start);
+    using namespace std::chrono;
+
+    const auto day_id = day_to_string_id(DAY_);
+    m_sample = read("../days/" + day_id + "/data/sample.txt");
+
+    const auto load_start = steady_clock::now();
+    m_input = read("../days/" + day_id + "/data/input.txt");
+    const auto load_end = steady_clock::now();
+
+    const auto duration_ns = duration_cast<nanoseconds>(load_end - load_start);
     m_load_duration_us = duration_ns.count() / 1000.0;
   }
+
   inline void run() override final {
-    std::cout << "Day " << m_day << ": " << std::endl;
-    std::cout << "  Loading took " << m_load_duration_us << " us" << std::endl;
+    std::cout << "----------" << std::endl;
+    std::cout << " Solution '" << m_name << "': " << std::endl;
+    std::cout << "   Loading took " << m_load_duration_us << " us" << std::endl;
 
     for (auto& part : m_parts) {
       part->introduce();
@@ -96,21 +94,18 @@ public:
       part->run();
       part->print();
     }
-    std::cout << "-----------------" << std::endl;
   }
 
-protected:
-  DayBase(int day)
-    : m_day(day) {}
+protected: // Methods
+  SolutionBase(const std::string& name)
+    : m_name(name) {}
 
-protected:
+protected: // Members
   std::vector<std::unique_ptr<IPart>> m_parts;
-
   C m_input;
   C m_sample;
 
-private:
-  int m_day;
-
+private: // Members
+  std::string m_name;
   float m_load_duration_us;
 };

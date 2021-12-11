@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 #include <vector>
 
 struct Input {
@@ -9,6 +10,8 @@ struct Input {
 };
 using Result = int32_t;
 
-static int DAY_ = 3;
-static Result PART1_SAMPLE_RESULT_ = 198;
-static Result PART2_SAMPLE_RESULT_ = 230;
+static const std::string SOLUTION_NAME_{"first"};
+
+#include "day.hpp"
+#include "result.hpp"
+#include "solution_impl.hpp"

@@ -1,7 +1,6 @@
 
 
-#include "datatypes.hpp"
-#include "day.hpp"
+#include "solution.hpp"
 
 #include <fstream>
 #include <numeric>
@@ -31,7 +30,7 @@ std::vector<int32_t> window_sum(const Input& inputs, size_t window_size) {
 }
 } // namespace
 
-Input Day::read(const std::string& file_path) {
+Input Solution::read(const std::string& file_path) {
   Input inputs;
   std::ifstream line_stream(file_path);
   std::string line;
@@ -41,19 +40,19 @@ Input Day::read(const std::string& file_path) {
   return inputs;
 }
 
-Result Day::Part1::process(const Input& input) {
+Result Solution::Part1::process(const Input& input) {
   return count_increments(input);
 }
 
-Result Day::Part2::process(const Input& input) {
+Result Solution::Part2::process(const Input& input) {
   const auto sums = window_sum(input, 3);
   return count_increments(sums);
 }
 
-extern "C" Day* create_object(int num) {
-  return new Day();
+extern "C" Solution* create_solution() {
+  return new Solution();
 }
 
-extern "C" void destroy_object(Day* object) {
+extern "C" void destroy_solution(Solution* object) {
   delete object;
 }

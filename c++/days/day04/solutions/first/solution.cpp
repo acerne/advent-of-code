@@ -1,7 +1,6 @@
 
 
-#include "datatypes.hpp"
-#include "day.hpp"
+#include "solution.hpp"
 
 #include <fstream>
 #include <optional>
@@ -9,6 +8,7 @@
 
 namespace
 {
+
 class Player
 {
 public:
@@ -55,7 +55,7 @@ private:
 
 } // namespace
 
-Input Day::read(const std::string& file_path) {
+Input Solution::read(const std::string& file_path) {
   Input inputs;
   std::ifstream line_stream(file_path);
   std::string line, number;
@@ -82,7 +82,7 @@ Input Day::read(const std::string& file_path) {
   return inputs;
 }
 
-Result Day::Part1::process(const Input& input) {
+Result Solution::Part1::process(const Input& input) {
   std::vector<Player> players;
   for (const auto& board : input.boards) {
     players.emplace_back(board);
@@ -99,7 +99,7 @@ Result Day::Part1::process(const Input& input) {
   return -1;
 }
 
-Result Day::Part2::process(const Input& input) {
+Result Solution::Part2::process(const Input& input) {
   std::vector<Player> players;
   for (const auto& board : input.boards) {
     players.emplace_back(board);
@@ -121,10 +121,10 @@ Result Day::Part2::process(const Input& input) {
   return -1;
 }
 
-extern "C" Day* create_object(int num) {
-  return new Day();
+extern "C" Solution* create_solution() {
+  return new Solution();
 }
 
-extern "C" void destroy_object(Day* object) {
+extern "C" void destroy_solution(Solution* object) {
   delete object;
 }

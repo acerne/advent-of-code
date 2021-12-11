@@ -1,36 +1,36 @@
 #pragma once
 
-#include "base.hpp"
+#include "solution_base.hpp"
 
-class Day : public DayBase<Input>
+class Solution : public SolutionBase<Input>
 {
-public:
-  class Part1 : public DayBase::PartBase<Result>
+public: // Classes
+  class Part1 : public SolutionBase::PartBase<Result>
   {
-  public:
+  public: // Methods
     Part1(const Input& input, const Input& sample)
       : PartBase(1, input, sample, PART1_SAMPLE_RESULT_) {}
 
     Result process(const Input& input) override;
   };
 
-  class Part2 : public DayBase::PartBase<Result>
+  class Part2 : public SolutionBase::PartBase<Result>
   {
-  public:
+  public: // Methods
     Part2(const Input& input, const Input& sample)
       : PartBase(2, input, sample, PART2_SAMPLE_RESULT_) {}
 
     Result process(const Input& input) override;
   };
 
-public:
-  Day()
-    : DayBase(DAY_) {
+public: // Methods
+  Solution()
+    : SolutionBase(SOLUTION_NAME_) {
     m_parts.push_back(std::make_unique<Part1>(m_input, m_sample));
     m_parts.push_back(std::make_unique<Part2>(m_input, m_sample));
   }
-  Day(const Day&) = delete;
-  Day(Day&&) = delete;
+  Solution(const Solution&) = delete;
+  Solution(Solution&&) = delete;
 
   Input read(const std::string& file_path) override;
 };

@@ -9,13 +9,12 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i < argc; i++) {
       args.push_back(std::stoi(argv[i]));
     }
-    days = Loader::load_some(args);
+    days = DayLoader::load_some(args);
   } else {
-    days = Loader::load_all();
+    days = DayLoader::load_all();
   }
 
   for (auto& day : days) {
-    day.get()->load();
-    day.get()->run();
+    day.get()->execute();
   }
 }

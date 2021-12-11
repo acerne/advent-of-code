@@ -1,6 +1,8 @@
-#include "datatypes.hpp"
-#include "day.hpp"
 
+
+#include "solution.hpp"
+
+#include <algorithm>
 #include <bitset>
 #include <fstream>
 #include <numeric>
@@ -53,7 +55,7 @@ uint16_t decode_p2(const Input& input, bool search_most_common) {
 
 } // namespace
 
-Input Day::read(const std::string& file_path) {
+Input Solution::read(const std::string& file_path) {
   Input input;
   std::ifstream line_stream(file_path);
   std::string line;
@@ -66,22 +68,22 @@ Input Day::read(const std::string& file_path) {
   return input;
 }
 
-Result Day::Part1::process(const Input& input) {
+Result Solution::Part1::process(const Input& input) {
   const auto [gamma, epsilon] = decode_p1(input);
   return gamma * epsilon;
 }
 
-Result Day::Part2::process(const Input& input) {
+Result Solution::Part2::process(const Input& input) {
   const auto oxygen_generator_rating = decode_p2(input, true);
   const auto co2_scrubber_rating = decode_p2(input, false);
 
   return oxygen_generator_rating * co2_scrubber_rating;
 }
 
-extern "C" Day* create_object(int num) {
-  return new Day();
+extern "C" Solution* create_solution() {
+  return new Solution();
 }
 
-extern "C" void destroy_object(Day* object) {
+extern "C" void destroy_solution(Solution* object) {
   delete object;
 }
