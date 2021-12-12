@@ -18,11 +18,11 @@ Input Solution::read(const std::string& file_path) {
 }
 
 Result Solution::Part1::process(const Input& input) {
-  // return ;
+  return -1;
 }
 
 Result Solution::Part2::process(const Input& input) {
-  // return ;
+  return -1;
 }
 
 extern "C" Solution* create_solution() {
