@@ -4,7 +4,9 @@
 
 static std::string day_to_string_id(int day) {
   auto num = std::to_string(day);
-  num.insert(0, 1, '0');
+  if (num.size() < 2) {
+    num.insert(0, 1, '0');
+  }
   return "day" + num;
 }
 
