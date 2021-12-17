@@ -3,10 +3,19 @@
 #include "interfaces.hpp"
 
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
+
+template<typename, typename = void>
+struct is_vector : std::false_type {};
+
+template<typename T>
+struct is_vector<std::vector<T>> : std::true_type {};
 
 template<class C>
 class SolutionBase : public ISolution
@@ -35,14 +44,8 @@ public: // Classes
     }
 
     inline void print() override final {
-      if (m_test_result != m_test_expected) {
-        std::cout << "   Test FAILED!" << std::endl;
-        std::cout << "     - Expected result = " << m_test_expected << std::endl;
-        std::cout << "     - Actual result =   " << m_test_result << std::endl;
-      } else {
-        std::cout << "   Test passed." << std::endl;
-      }
-      std::cout << "   Result = " << m_result << std::endl;
+      const auto report = get_report_(m_result, m_test_result, m_test_expected);
+      std::cout << report;
       std::cout << "   Calculation took " << m_duration_us << " us" << std::endl;
     }
 
@@ -52,6 +55,59 @@ public: // Classes
       , m_input(input)
       , m_sample(sample)
       , m_test_expected(sample_result) {}
+
+  private: // Methods
+    template<typename U>
+    static std::string get_report_(const U& result, const U& test_result, const U& test_expected) {
+      bool failed = false;
+      std::ostringstream oss;
+      if (test_result != test_expected) {
+        failed = true;
+        oss << "     - Expected result = " << test_expected << std::endl;
+        oss << "     - Actual result =   " << test_result << std::endl;
+      }
+      if (failed) {
+        oss << "   Test FAILED!" << std::endl;
+      } else {
+        oss << "   Test passed." << std::endl;
+      }
+      oss << "   Result = " << result << std::endl;
+      return oss.str();
+    }
+
+    template<typename U>
+    static std::string get_report_(const std::vector<U>& result,
+                                   const std::vector<U>& test_result,
+                                   const std::vector<U>& test_expected) {
+      bool failed = false;
+      std::ostringstream oss;
+      if (test_result.size() != test_expected.size()) {
+        failed = true;
+        oss << "     - Expected result size = " << test_expected.size() << std::endl;
+        oss << "     - Actual result size =   " << test_result.size() << std::endl;
+      } else {
+        for (size_t i = 0; i < test_expected.size(); i++) {
+          if (test_expected.at(i) > std::numeric_limits<U>::min()) {
+            if (test_result.at(i) != test_expected.at(i)) {
+              failed = true;
+              oss << "     - [" << i << "] Expected result = " << test_expected.at(i) << std::endl;
+              oss << "     - [" << i << "] Actual result =   " << test_result.at(i) << std::endl;
+            }
+          }
+        }
+      }
+      if (failed) {
+        oss << "   Test FAILED!" << std::endl;
+      } else {
+        oss << "   Test passed." << std::endl;
+      }
+      oss << "   Result = { ";
+      for (const auto& value : result) {
+        oss << value << " ";
+      }
+      oss << "}" << std::endl;
+      return oss.str();
+    }
 
   private: // Members
     const int m_part;
