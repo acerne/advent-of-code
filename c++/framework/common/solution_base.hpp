@@ -60,17 +60,18 @@ public: // Classes
     template<typename U>
     static std::string get_report_(const U& result, const U& test_result, const U& test_expected) {
       bool failed = false;
-      std::ostringstream oss;
+      std::ostringstream oss, fail_report;
       if (test_result != test_expected) {
         failed = true;
-        oss << "     - Expected result = " << test_expected << std::endl;
-        oss << "     - Actual result =   " << test_result << std::endl;
+        fail_report << "     - Expected result = " << test_expected << std::endl;
+        fail_report << "     - Actual result =   " << test_result << std::endl;
       }
       if (failed) {
         oss << "   Test FAILED!" << std::endl;
       } else {
         oss << "   Test passed." << std::endl;
       }
+      oss << fail_report.str();
       oss << "   Result = " << result << std::endl;
       return oss.str();
     }
@@ -80,18 +81,20 @@ public: // Classes
                                    const std::vector<U>& test_result,
                                    const std::vector<U>& test_expected) {
       bool failed = false;
-      std::ostringstream oss;
+      std::ostringstream oss, fail_report;
       if (test_result.size() != test_expected.size()) {
         failed = true;
-        oss << "     - Expected result size = " << test_expected.size() << std::endl;
-        oss << "     - Actual result size =   " << test_result.size() << std::endl;
+        fail_report << "     - Expected result size = " << test_expected.size() << std::endl;
+        fail_report << "     - Actual result size =   " << test_result.size() << std::endl;
       } else {
         for (size_t i = 0; i < test_expected.size(); i++) {
           if (test_expected.at(i) > std::numeric_limits<U>::min()) {
             if (test_result.at(i) != test_expected.at(i)) {
               failed = true;
-              oss << "     - [" << i << "] Expected result = " << test_expected.at(i) << std::endl;
-              oss << "     - [" << i << "] Actual result =   " << test_result.at(i) << std::endl;
+              fail_report << "     - [" << i << "] Expected result = " << test_expected.at(i)
+                          << std::endl;
+              fail_report << "     - [" << i << "] Actual result =   " << test_result.at(i)
+                          << std::endl;
             }
           }
         }
@@ -101,6 +104,7 @@ public: // Classes
       } else {
         oss << "   Test passed." << std::endl;
       }
+      oss << fail_report.str();
       oss << "   Result = { ";
       for (const auto& value : result) {
         oss << value << " ";
