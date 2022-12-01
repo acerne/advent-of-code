@@ -1,8 +1,11 @@
 #pragma once
 
+#include <map>
+#include <memory>
 #include <optional>
+#include <string>
 
-#include "FactoryManager.h"
+#include "Solution.h"
 
 namespace aoc {
 

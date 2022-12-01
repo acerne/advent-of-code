@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "FactoryManager.h"
 #include "Timer.h"
 
 namespace aoc {

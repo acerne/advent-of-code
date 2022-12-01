@@ -1,4 +1,4 @@
-#include "Day01.h"
+#include "Day.h"
 
 #include "FactoryManager.h"
 
@@ -18,7 +18,7 @@ std::vector<int> sum_calories(const Input& values) {
 
 }  // namespace
 
-Input Day01::read(std::ifstream& line_stream) const {
+Input Day::read(std::ifstream& line_stream) const {
     Input inputs;
     std::string line;
     std::vector<int32_t> elf;
@@ -34,12 +34,12 @@ Input Day01::read(std::ifstream& line_stream) const {
     return inputs;
 }
 
-Result Day01::partOne(const Input& input) const {
+Result Day::partOne(const Input& input) const {
     auto sums = sum_calories(input);
     return *std::max_element(sums.begin(), sums.end());
 }
 
-Result Day01::partTwo(const Input& input) const {
+Result Day::partTwo(const Input& input) const {
     auto sums = sum_calories(input);
     std::sort(sums.begin(), sums.end());
     int32_t top_three = 0;
@@ -50,7 +50,7 @@ Result Day01::partTwo(const Input& input) const {
 }
 
 extern "C" void registerFactories(FactoryManager* manager) {
-    manager->registerSolution<Day01>("2022:01");
+    manager->registerSolution<Day>(YEAR + "-" + DAY);
 }
 
 }  // namespace aoc

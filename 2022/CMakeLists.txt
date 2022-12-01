@@ -1,16 +1,35 @@
-cmake_minimum_required(VERSION 3.16)  
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/solutions)
 
-project(advent-of-code)
+SET(YEAR 2022)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+MACRO(SUBDIRLIST result curdir)
+  FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${curdir}/${child})
+      LIST(APPEND dirlist ${child})
+    ENDIF()
+  ENDFOREACH()
+  SET(${result} ${dirlist})
+ENDMACRO() 
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# days
 
-add_subdirectory(framework)
-add_subdirectory(solutions)  
-add_subdirectory(runner)    
- 
+SUBDIRLIST(DAYS ${CMAKE_CURRENT_SOURCE_DIR}/)
 
+FOREACH(DAY ${DAYS})
+    project(${YEAR}-${DAY})
+    message("Setting up project " ${PROJECT_NAME} "...")
+
+    set(SRCS
+        ${DAY}/Day.cpp
+    )
+
+    add_library(${PROJECT_NAME} SHARED ${SRCS})
+
+    target_link_libraries(${PROJECT_NAME} 
+        PRIVATE
+        AocFramework
+    )
+
+ENDFOREACH()
