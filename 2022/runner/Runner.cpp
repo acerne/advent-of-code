@@ -20,11 +20,18 @@ Runner::Runner(int argc, char* argv[]) {
 
 void Runner::load() {
     std::cout << "Loading solutions..." << std::endl;
+    m_solutions.clear();
     Timer loading;
     aoc::FactoryManager manager;
     loading.start();
-    manager.loadFactories("./libAocSolutions.so");
-    m_solutions = manager.createAllSolutions();
+    std::filesystem::directory_iterator dir("./solutions/");
+    for (const auto& item : dir) {
+        if (item.is_regular_file() && item.path().extension() == ".so") {
+            manager.loadFactories(item);
+            auto solutions = manager.createAllSolutions();
+            m_solutions.merge(solutions);
+        }
+    }
     loading.stop();
     std::cout << m_solutions.size() << " solutions loaded (" << loading.duration() << " ms)."
               << std::endl;
