@@ -38,6 +38,11 @@ void Runner::run() {
         {Part::Two, "2"}
     };
 
+    Timer execution;
+    int n_executed = 0;
+    std::vector<std::string> failed;
+
+    execution.start();
     for (const auto& [name, solution] : m_solutions) {
         if (m_name && *m_name != name) {
             continue;
@@ -55,6 +60,7 @@ void Runner::run() {
             if (solution->test(part)) {
                 std::cout << "  Test passed." << std::endl;
             } else {
+                failed.push_back(name + " part " + part_string.at(part));
                 std::cout << "  Test FAILED!" << std::endl;
                 std::cout << "  - Expected result = " << solution->expected(part) << std::endl;
                 std::cout << "  - Actual result   = " << solution->result(part) << std::endl;
@@ -66,6 +72,19 @@ void Runner::run() {
             std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
             std::cout << "  - Calculation took " << calculation.duration() << " ms"
                       << std::endl;
+        }
+        n_executed++;
+    }
+    execution.stop();
+
+    std::cout << std::endl << "Report :" << std::endl;
+    std::cout << " " << n_executed << " methods evaluated, " << failed.size()
+              << " parts failed." << std::endl;
+    std::cout << " Execution took " << execution.duration() << " ms" << std::endl;
+    if (!failed.empty()) {
+        std::cout << std::endl << "Failed: " << std::endl;
+        for (const auto& item : failed) {
+            std::cout << "  " << item << std::endl;
         }
     }
 }

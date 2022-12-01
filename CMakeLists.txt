@@ -11,4 +11,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(framework)
 add_subdirectory(runner)
+add_subdirectory(2021)  
 add_subdirectory(2022)  

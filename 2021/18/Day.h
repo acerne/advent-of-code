@@ -6,14 +6,16 @@
 
 namespace aoc {
 
-using Input = std::vector<std::vector<int32_t>>;
+class Snailfish;
+
+using Input = std::vector<Snailfish>;
 using Result = int32_t;
 
-static const std::string YEAR{"2022"};
-static const std::string DAY{"01"};
+static const std::string YEAR{"2021"};
+static const std::string DAY{"18"};
 
-static const Result RESULT_PART_ONE{24000};
-static const Result RESULT_PART_TWO{45000};
+static const Result RESULT_PART_ONE{4140};
+static const Result RESULT_PART_TWO{3993};
 
 class Day : public Solution<Input, Result> {
   public:  // Constructors

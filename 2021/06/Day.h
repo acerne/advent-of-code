@@ -6,14 +6,14 @@
 
 namespace aoc {
 
-using Input = std::vector<std::vector<int32_t>>;
-using Result = int32_t;
+using Input = std::vector<int8_t>;
+using Result = size_t;
 
-static const std::string YEAR{"2022"};
-static const std::string DAY{"01"};
+static const std::string YEAR{"2021"};
+static const std::string DAY{"06"};
 
-static const Result RESULT_PART_ONE{24000};
-static const Result RESULT_PART_TWO{45000};
+static const Result RESULT_PART_ONE{5934};
+static const Result RESULT_PART_TWO{26984457539};
 
 class Day : public Solution<Input, Result> {
   public:  // Constructors

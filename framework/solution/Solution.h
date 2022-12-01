@@ -30,8 +30,10 @@ class SolutionBase {
 template <typename Input, typename Result>
 class Solution : public SolutionBase {
   public:  // Constructors
-    explicit Solution(std::string path, const Result& partOne, const Result& partTwo)
-          : m_path(std::move(path)),
+    explicit Solution(std::string year, std::string day, const Result& partOne,
+                      const Result& partTwo)
+          : m_year(std::move(year)),
+            m_day(std::move(day)),
             m_expected{
                 {Part::One, partOne},
                 {Part::Two, partTwo}
@@ -59,13 +61,14 @@ class Solution : public SolutionBase {
     static std::string resultToString(const T& result);
 
     template <typename T>
-    static bool equals(const T& a, const T& b);
+    static bool equals(const T& result, const T& expected);
 
     template <typename T>
-    static bool equals(const std::vector<T>& a, const std::vector<T>& b);
+    static bool equals(const std::vector<T>& result, const std::vector<T>& expected);
 
   private:  // Members
-    const std::string m_path;
+    const std::string m_year;
+    const std::string m_day;
     const std::map<Part, Result> m_expected;
     std::map<Part, Result> m_result;
     Input m_sample;
@@ -74,14 +77,14 @@ class Solution : public SolutionBase {
 
 template <typename Input, typename Result>
 void Solution<Input, Result>::load() {
-    std::string sample_path = "../../" + m_path + "data/sample.txt";
+    std::string sample_path = "../../" + m_year + "/" + m_day + "/data/sample.txt";
     std::ifstream sample_stream(sample_path);
     if (!sample_stream.good()) {
         throw std::runtime_error("File " + sample_path + " does not exist");
     }
     m_sample = read(sample_stream);
 
-    std::string input_path = "../../" + m_path + "data/input.txt";
+    std::string input_path = "../../" + m_year + "/" + m_day + "/data/input.txt";
     std::ifstream input_stream(input_path);
     if (!input_stream.good()) {
         throw std::runtime_error("File " + input_path + " does not exist");
@@ -136,30 +139,38 @@ std::string Solution<Input, Result>::resultToString(const std::vector<T>& result
     for (const auto& value : result) {
         oss << value << " ";
     }
-    oss << "}" << std::endl;
+    oss << "}";
     return oss.str();
 }
 
 template <typename Input, typename Result>
 template <typename T>
 std::string Solution<Input, Result>::resultToString(const T& result) {
-    return std::to_string(result);
+    std::ostringstream oss;
+    oss << result;
+    return oss.str();
 }
 
 template <typename Input, typename Result>
 template <typename T>
-bool Solution<Input, Result>::equals(const T& a, const T& b) {
-    return a == b;
+bool Solution<Input, Result>::equals(const T& result, const T& expected) {
+    return result == expected;
 }
 
 template <typename Input, typename Result>
 template <typename T>
-bool Solution<Input, Result>::equals(const std::vector<T>& a, const std::vector<T>& b) {
-    if (a.size() != b.size()) {
+bool Solution<Input, Result>::equals(const std::vector<T>& result,
+                                     const std::vector<T>& expected) {
+    if (result.size() != expected.size()) {
         return false;
     } else {
-        for (size_t i = 0; i < a.size(); i++) {
-            if (a.at(i) != b.at(i)) {
+        for (size_t i = 0; i < result.size(); i++) {
+            if (expected.at(i) == std::numeric_limits<T>::max()) {
+                // Solution 2021-16 has a special case to ignore some values. These are
+                // identified as max value in the vector of expected values.
+                continue;
+            }
+            if (result.at(i) != expected.at(i)) {
                 return false;
             }
         }
