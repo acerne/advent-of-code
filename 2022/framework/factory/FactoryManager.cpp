@@ -32,15 +32,16 @@ void FactoryManager::loadFactories(const std::filesystem::path& file_path) {
     }
 }
 
-std::unique_ptr<Solution> FactoryManager::createSolution(const std::string& name) const {
+std::unique_ptr<SolutionBase> FactoryManager::createSolution(const std::string& name) const {
     if (!m_solution_factories.contains(name)) {
         throw std::runtime_error("Factory " + name + " not registered");
     }
     return m_solution_factories.at(name)->create();
 }
 
-std::map<std::string, std::unique_ptr<Solution>> FactoryManager::createAllSolutions() const {
-    std::map<std::string, std::unique_ptr<Solution>> solutions;
+std::map<std::string, std::unique_ptr<SolutionBase>> FactoryManager::createAllSolutions()
+    const {
+    std::map<std::string, std::unique_ptr<SolutionBase>> solutions;
     for (const auto& [name, factory] : m_solution_factories) {
         solutions[name] = factory->create();
     }

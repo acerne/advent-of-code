@@ -8,13 +8,7 @@ namespace aoc {
 
 Runner::Runner(int argc, char* argv[]) {
     if (argc > 1) {
-        m_year = std::stoi(argv[1]);
-    }
-    if (argc > 2) {
-        m_day = std::stoi(argv[2]);
-    }
-    if (argc > 3) {
-        m_name = argv[3];
+        m_name = argv[1];
     }
 }
 
@@ -38,62 +32,40 @@ void Runner::load() {
 }
 
 void Runner::run() {
+    static std::map<Part, std::string> part_string{
+        {Part::One, "1"},
+        {Part::Two, "2"}
+    };
+
     for (const auto& [name, solution] : m_solutions) {
-        if (m_year && *m_year != solution->year()) {
-            continue;
-        }
-        if (m_day && *m_day != solution->day()) {
-            continue;
-        }
         if (m_name && *m_name != name) {
             continue;
         }
 
-        std::cout << std::endl
-                  << "Running solution " << name << " [" << solution->year() << "/"
-                  << solution->day() << "]" << std::endl;
+        std::cout << std::endl << "Running solution " << name << std::endl;
         Timer loading;
         Timer calculation;
 
-        std::cout << " Part one:" << std::endl;
-        solution->loadSample();
-        solution->solvePartOne();
-        if (solution->checkPartOne()) {
-            std::cout << "  Test passed." << std::endl;
-        } else {
-            std::cout << "  Test FAILED!" << std::endl;
-            std::cout << "  - Expected result = " << solution->expectedPartOne() << std::endl;
-            std::cout << "  - Actual result   = " << solution->result() << std::endl;
+        for (const auto& part : {Part::One, Part::Two}) {
+            std::cout << " Part " << part_string.at(part) << ":" << std::endl;
+            loading.start();
+            solution->load();
+            loading.stop();
+            if (solution->test(part)) {
+                std::cout << "  Test passed." << std::endl;
+            } else {
+                std::cout << "  Test FAILED!" << std::endl;
+                std::cout << "  - Expected result = " << solution->expected(part) << std::endl;
+                std::cout << "  - Actual result   = " << solution->result(part) << std::endl;
+            }
+            calculation.start();
+            solution->solve(part);
+            calculation.stop();
+            std::cout << "  Result   = " << solution->result(part) << std::endl;
+            std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
+            std::cout << "  - Calculation took " << calculation.duration() << " ms"
+                      << std::endl;
         }
-        loading.start();
-        solution->loadInput();
-        loading.stop();
-        calculation.start();
-        solution->solvePartOne();
-        calculation.stop();
-        std::cout << "  Result   = " << solution->result() << std::endl;
-        std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
-        std::cout << "  - Calculation took " << calculation.duration() << " ms" << std::endl;
-
-        std::cout << " Part two:" << std::endl;
-        solution->loadSample();
-        solution->solvePartTwo();
-        if (solution->checkPartTwo()) {
-            std::cout << "  Test passed." << std::endl;
-        } else {
-            std::cout << "  Test FAILED!" << std::endl;
-            std::cout << "  - Expected result = " << solution->expectedPartTwo() << std::endl;
-            std::cout << "  - Actual result   = " << solution->result() << std::endl;
-        }
-        loading.start();
-        solution->loadInput();
-        loading.stop();
-        calculation.start();
-        solution->solvePartTwo();
-        calculation.stop();
-        std::cout << "  Result   = " << solution->result() << std::endl;
-        std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
-        std::cout << "  - Calculation took " << calculation.duration() << " ms" << std::endl;
     }
 }
 

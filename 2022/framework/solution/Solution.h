@@ -1,36 +1,143 @@
 #pragma once
 
+#include <fstream>
+#include <map>
+#include <sstream>
+#include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace aoc {
 
-class Solution {
-  public:  // Constructors
-    Solution(int year, int day);
-    virtual ~Solution() = default;
+enum class Part {
+    One,
+    Two,
+};
 
-  public:  // Methods
-    int year() const;
-    int day() const;
+class SolutionBase {
+  public:  // Constructors
+    SolutionBase() = default;
+    virtual ~SolutionBase() = default;
 
   public:  // Pure virtual methods
-    virtual void loadSample() = 0;
-    virtual void loadInput() = 0;
+    virtual void load() = 0;
+    virtual bool test(Part part) = 0;
+    virtual void solve(Part part) = 0;
+    virtual std::string result(Part part) const = 0;
+    virtual std::string expected(Part part) const = 0;
+};
 
-    virtual void solvePartOne() = 0;
-    virtual bool checkPartOne() const = 0;
-    virtual std::string expectedPartOne() const = 0;
+template <typename Input, typename Result>
+class Solution : public SolutionBase {
+  public:  // Constructors
+    explicit Solution(std::string path, const Result& partOne, const Result& partTwo)
+          : m_path(std::move(path)),
+            m_expected{
+                {Part::One, partOne},
+                {Part::Two, partTwo}
+    } {}
 
-    virtual void solvePartTwo() = 0;
-    virtual bool checkPartTwo() const = 0;
-    virtual std::string expectedPartTwo() const = 0;
+    virtual ~Solution() = default;
 
-    virtual std::string result() const = 0;
+  public:  // Pure virtual methods
+    virtual Input read(std::ifstream& line_stream) const = 0;
+    virtual Result partOne(const Input& input) const = 0;
+    virtual Result partTwo(const Input& input) const = 0;
+
+  public:  // SolutionBase methods
+    void load() final override {
+        std::string sample_path = m_path + "data/sample.txt";
+        std::ifstream sample_stream(sample_path);
+        if (!sample_stream.good()) {
+            throw std::runtime_error("File " + sample_path + " does not exist");
+        }
+        m_sample = read(sample_stream);
+
+        std::string input_path = m_path + "data/input.txt";
+        std::ifstream input_stream(input_path);
+        if (!input_stream.good()) {
+            throw std::runtime_error("File " + input_path + " does not exist");
+        }
+        m_input = read(input_stream);
+    }
+
+    bool test(Part part) final override {
+        switch (part) {
+            case Part::One: {
+                m_result[part] = partOne(m_sample);
+            } break;
+            case Part::Two: {
+                m_result[part] = partTwo(m_sample);
+            } break;
+            default:
+                throw std::runtime_error("Invalid state");
+        }
+        return equals(m_result.at(part), m_expected.at(part));
+    }
+
+    void solve(Part part) final override {
+        switch (part) {
+            case Part::One: {
+                m_result[part] = partOne(m_input);
+            } break;
+            case Part::Two: {
+                m_result[part] = partTwo(m_input);
+            } break;
+            default:
+                throw std::runtime_error("Invalid state");
+        }
+    }
+
+    std::string result(Part part) const final override {
+        return resultToString(m_result.at(part));
+    }
+
+    std::string expected(Part part) const final override {
+        return resultToString(m_expected.at(part));
+    }
+
+  private:  // Methods
+    template <typename T>
+    static std::string resultToString(const std::vector<T>& result) {
+        std::ostringstream oss, fail_report;
+        oss << "{ ";
+        for (const auto& value : result) {
+            oss << value << " ";
+        }
+        oss << "}" << std::endl;
+        return oss.str();
+    }
+
+    template <typename T>
+    static std::string resultToString(const T& result) {
+        return std::to_string(result);
+    }
+
+    template <typename T>
+    static bool equals(const T& a, const T& b) {
+        return a == b;
+    }
+
+    template <typename T>
+    static bool equals(const std::vector<T>& a, const std::vector<T>& b) {
+        if (a.size() != b.size()) {
+            return false;
+        } else {
+            for (size_t i = 0; i < a.size(); i++) {
+                if (a.at(i) != b.at(i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
   private:  // Members
-    const int m_year;
-    const int m_day;
-    const std::string m_name;
+    const std::string m_path;
+    const std::map<Part, Result> m_expected;
+    std::map<Part, Result> m_result;
+    Input m_sample;
+    Input m_input;
 };
 
 }  // namespace aoc

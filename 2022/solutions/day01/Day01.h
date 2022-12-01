@@ -13,28 +13,15 @@ static const Result RESULT_PART_ONE{24000};
 static const Result RESULT_PART_TWO{45000};
 static const std::string FOLDER{"../../2022/solutions/day01/"};
 
-class Day01 : public Solution {
+class Day01 : public Solution<Input, Result> {
   public:  // Constructors
     Day01()
-          : Solution(2022, 1) {}
+          : Solution(FOLDER, RESULT_PART_ONE, RESULT_PART_TWO) {}
 
   public:  // Solution methods
-    void loadSample() override;
-    void loadInput() override;
-
-    void solvePartOne() override;
-    bool checkPartOne() const override;
-    std::string expectedPartOne() const override;
-
-    void solvePartTwo() override;
-    bool checkPartTwo() const override;
-    std::string expectedPartTwo() const override;
-
-    std::string result() const override;
-
-  private:  // Members
-    Input m_input;
-    Result m_result;
+    Input read(std::ifstream& line_stream) const override;
+    Result partOne(const Input& input) const override;
+    Result partTwo(const Input& input) const override;
 };
 
 }  // namespace aoc

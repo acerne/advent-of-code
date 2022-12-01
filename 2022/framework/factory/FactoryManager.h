@@ -22,16 +22,16 @@ class FactoryManager {
         if (m_solution_factories.contains(name)) {
             throw std::runtime_error("Duplicate factories with name " + name);
         }
-        std::unique_ptr<FactoryBase<Solution>> factory =
-            std::make_unique<Factory<Solution, T>>(name);
+        std::unique_ptr<FactoryBase<SolutionBase>> factory =
+            std::make_unique<Factory<SolutionBase, T>>(name);
         m_solution_factories.emplace(name, std::move(factory));
     }
 
-    std::unique_ptr<Solution> createSolution(const std::string& name) const;
-    std::map<std::string, std::unique_ptr<Solution>> createAllSolutions() const;
+    std::unique_ptr<SolutionBase> createSolution(const std::string& name) const;
+    std::map<std::string, std::unique_ptr<SolutionBase>> createAllSolutions() const;
 
   private:  // Members
-    std::map<std::string, std::unique_ptr<FactoryBase<Solution>>> m_solution_factories;
+    std::map<std::string, std::unique_ptr<FactoryBase<SolutionBase>>> m_solution_factories;
 };
 
 }  // namespace aoc

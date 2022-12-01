@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SRCS
     factory/FactoryManager.cpp
-    solution/Solution.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})

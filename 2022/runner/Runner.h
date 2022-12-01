@@ -15,9 +15,7 @@ class Runner {
     void run();
 
   private:  // Members
-    std::optional<int> m_year;
-    std::optional<int> m_day;
     std::optional<std::string> m_name;
-    std::map<std::string, std::unique_ptr<Solution>> m_solutions;
+    std::map<std::string, std::unique_ptr<SolutionBase>> m_solutions;
 };
 }  // namespace aoc
