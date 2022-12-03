@@ -59,19 +59,19 @@ void Runner::run() {
             loading.stop();
             if (solution->test(part)) {
                 std::cout << "  Test passed." << std::endl;
+                calculation.start();
+                solution->solve(part);
+                calculation.stop();
+                std::cout << "  Result   = " << solution->result(part) << std::endl;
+                std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
+                std::cout << "  - Calculation took " << calculation.duration() << " ms"
+                          << std::endl;
             } else {
                 failed.push_back(name + " part " + part_string.at(part));
                 std::cout << "  Test FAILED!" << std::endl;
                 std::cout << "  - Expected result = " << solution->expected(part) << std::endl;
                 std::cout << "  - Actual result   = " << solution->result(part) << std::endl;
             }
-            calculation.start();
-            solution->solve(part);
-            calculation.stop();
-            std::cout << "  Result   = " << solution->result(part) << std::endl;
-            std::cout << "  - Loading took " << loading.duration() << " ms" << std::endl;
-            std::cout << "  - Calculation took " << calculation.duration() << " ms"
-                      << std::endl;
         }
         n_executed++;
     }
