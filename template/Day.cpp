@@ -1,6 +1,7 @@
 #include "Day.h"
 
 #include "FactoryManager.h"
+#include "helpers.h"
 
 namespace aoc {
 
@@ -20,11 +21,11 @@ Input Day::read(std::ifstream& line_stream) const {
 }
 
 Result Day::partOne(const Input& input) const {
-    //
+    return -1;
 }
 
 Result Day::partTwo(const Input& input) const {
-    //
+    return -1;
 }
 
 extern "C" void registerFactories(FactoryManager* manager) {
