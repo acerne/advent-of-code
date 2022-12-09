@@ -5,6 +5,10 @@
 
 namespace aoc::helpers {
 
+int sign(int value) {
+    return int(value > 0) - int(value < 0);
+}
+
 std::vector<std::string> tokenize(const std::string& line, char delimiter) {
     size_t start = 0;
     size_t end;
