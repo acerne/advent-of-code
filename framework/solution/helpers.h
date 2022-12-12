@@ -23,6 +23,20 @@ std::vector<std::string> tokenize(const std::string& line, char delimiter) {
     return tokens;
 }
 
+std::vector<std::string> tokenize(const std::string& line, const std::string& delimiter) {
+    size_t start = 0;
+    size_t end;
+    std::vector<std::string> tokens;
+
+    while ((end = line.find(delimiter, start)) != std::string::npos) {
+        tokens.push_back(line.substr(start, end - start));
+        start = end + delimiter.size();
+    }
+    tokens.push_back(line.substr(start));
+
+    return tokens;
+}
+
 std::pair<std::string, std::string> split(const std::string& line, char delimiter) {
     std::pair<std::string, std::string> tokens;
 
@@ -44,6 +58,18 @@ std::pair<std::string, std::string> split(const std::string& line,
     } else {
         return {line, ""};
     }
+}
+
+std::string trim(std::string str) {
+    str.erase(str.find_last_not_of(' ') + 1);
+    str.erase(0, str.find_first_not_of(' '));
+    return str;
+}
+
+std::pair<std::string, std::string> trim(std::pair<std::string, std::string> str) {
+    str.first = trim(str.first);
+    str.second = trim(str.second);
+    return str;
 }
 
 }  // namespace aoc::helpers
